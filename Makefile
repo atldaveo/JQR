@@ -8,12 +8,12 @@ INCLUDEDIR = include
 TESTDIR = test
 
 # Source files and object files
-SOURCES = $(SRCDIR)/main.c $(SRCDIR)/math.c $(SRCDIR)/helpers.c
+SOURCES = $(SRCDIR)/main.c $(SRCDIR)/arithmetic.c $(SRCDIR)/helpers.c
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
 
 # Output executables
 TARGET = $(BUILDDIR)/simple-calc
-TEST_TARGET = $(BUILDDIR)/test-math
+TEST_TARGET = $(BUILDDIR)/test-arithmetic
 
 # Compiler flags
 CFLAGS = -I$(INCLUDEDIR) -Wall -Wextra
@@ -47,9 +47,9 @@ test: $(TEST_TARGET)
 	./$(TEST_TARGET)
 
 # Build the test executable
-$(TEST_TARGET): $(SRCDIR)/math.c $(TESTDIR)/test_math.c
+$(TEST_TARGET): $(SRCDIR)/arithmetic.c $(TESTDIR)/test_arithmetic.c
 	@mkdir -p $(BUILDDIR)
-	$(CC) $(CFLAGS) $(TESTDIR)/test_math.c $(SRCDIR)/math.c -o $(TEST_TARGET) $(TESTFLAGS)
+	$(CC) $(CFLAGS) $(TESTDIR)/test_arithmetic.c $(SRCDIR)/arithmetic.c -o $(TEST_TARGET) $(TESTFLAGS)
 
 # Clean rule to remove build artifacts
 clean:

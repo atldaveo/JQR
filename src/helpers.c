@@ -1,6 +1,25 @@
+/**
+ * @file helpers.c
+ * @author David Chung
+ * @brief A series of function prototypes for miscellaneous helper functions
+ * to be used throughout the main program simple-calc.
+ * 
+ * @version 2.1
+ * @date 2024-11-25
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <stdio.h>
 #include <unistd.h>
 #include "debug.h"
+
+/**
+ * @brief Prints instructions on what the CMD Line input
+ * for simple-calc ought to be. 
+ * 
+ */
 
 void print_help()
 {
@@ -14,7 +33,13 @@ void print_help()
     printf("  -v                  Show version information\n");
 }
 
+/**
+ * @brief Prints the version information for simple-calc.
+ * 
+ */
+
 void print_version() 
 {
-    printf("simple-calc version 1.0\n");
+    printf("simple-calc version 2.1\n");
+    printf("Now includes other operators and better tests!\n");
 }

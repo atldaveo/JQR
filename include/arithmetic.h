@@ -1,5 +1,5 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef ARITHMETIC_H
+#define ARITHMETIC_H
 
 int add(int x, int y);
 int subtract(int x, int y);

@@ -1,6 +1,6 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
-#include "math.h"
+#include "arithmetic.h"
 
 // Tests for add function
 void test_add(void) {
