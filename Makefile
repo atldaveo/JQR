@@ -8,7 +8,7 @@ INCLUDEDIR = include
 TESTDIR = test
 
 # Source files and object files
-SOURCES = $(SRCDIR)/main.c $(SRCDIR)/math.c
+SOURCES = $(SRCDIR)/main.c $(SRCDIR)/math.c $(SRCDIR)/helpers.c
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(BUILDDIR)/%.o, $(SOURCES))
 
 # Output executables

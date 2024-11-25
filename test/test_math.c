@@ -14,14 +14,10 @@ void test_add_negative(void) {
     CU_ASSERT(add(-5, 5) == 0);
 }
 
+// Test for add function: false result required
 void test_assert_false(void)
 {
     CU_ASSERT_FALSE(add(2,2) == 5);
-}
-
-void test_should_fail(void)
-{
-    CU_ASSERT(add(2,2) == 5);
 }
 
 // Test for add function: zero
@@ -46,7 +42,6 @@ int main() {
     if ((CU_add_test(suite, "Test Positive Numbers", test_add_positive) == NULL) ||
         (CU_add_test(suite, "Test Negative Numbers", test_add_negative) == NULL) ||
         (CU_add_test(suite, "Test Assert False", test_assert_false) == NULL) || 
-        (CU_add_test(suite, "Test Should Fail", test_should_fail) == NULL) ||
         (CU_add_test(suite, "Test Zero", test_add_zero) == NULL)) {
         CU_cleanup_registry();
         return CU_get_error();
