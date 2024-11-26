@@ -5,7 +5,7 @@
  * 
  * This program performs simple arithmetic calculations given user input via CLI.
  * 
- * @version 2.1
+ * @version 2.2
  * @date 2024-11-25
  *
  */
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <errno.h>
 #include "arithmetic.h"
 #include "debug.h"
 #include "helpers.h"
@@ -31,10 +32,13 @@ int main(int argc, char *argv[]) {
      
     int opt = 0;
     long num1, num2;                /**< Numeric arguments will be converted to a long int. */
-    num1 = num2 = 0;                /**< Initialize the variables. */
     char operation = 0;             /**< Which operator we are going to use. */
     bool has_numbers;               /**< Status: Does *argv have numbers? */
     char *numEnd1, *numEnd2;        /**< Pointers to the ends of num1 and num2. */
+    
+    errno = 0;                      /**< Reset error number from (errno.h) */
+    num1 = 0;                       /**< Initialize the variables. */
+    num2 = 0;                       /**< Initialize the variables. */
 
  /**
  * @brief Parse command-line options using getopt.
@@ -55,37 +59,69 @@ int main(int argc, char *argv[]) {
             case 'a': // Add
                 operation = 'a';
                 num1 = strtol(optarg, &numEnd1, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
+                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
                 num2 = strtol(argv[optind], &numEnd2, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
-                has_numbers = 1;
+                if (0 != errno || '\0' != *numEnd2)             
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", argv[optind]);
+                    exit(EXIT_FAILURE);
+                }
+                has_numbers = true;
                 break;
 
             case 's': // Subtract
                 operation = 's';
                 num1 = strtol(optarg, &numEnd1, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
+                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
                 num2 = strtol(argv[optind], &numEnd2, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
-                has_numbers = 1;
+                if (0 != errno || '\0' != *numEnd2)             
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", argv[optind]);
+                    exit(EXIT_FAILURE);
+                }
+                has_numbers = true;
                 break;
 
             case 'm': // Multiply
                 operation = 'm';
                 num1 = strtol(optarg, &numEnd1, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
+                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
                 num2 = strtol(argv[optind], &numEnd2, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
-                has_numbers = 1;
+                if (0 != errno || '\0' != *numEnd2)             
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", argv[optind]);
+                    exit(EXIT_FAILURE);
+                }
+                has_numbers = true;
                 break;
 
             case 'd': // Divide
                 operation = 'd';
                 num1 = strtol(optarg, &numEnd1, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
+                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
                 num2 = strtol(argv[optind], &numEnd2, 10);
-                // TODO: Add Error Handling (in case argument is not a valid number - like if there's a letter in there)
-                has_numbers = 1;
+                if (0 != errno || '\0' != *numEnd2)             
+                {
+                    fprintf(stderr, "'%s' is an invalid operand\n", argv[optind]);
+                    exit(EXIT_FAILURE);
+                }
+                has_numbers = true;
                 break;
 
             case 'h': // Help
@@ -97,8 +133,8 @@ int main(int argc, char *argv[]) {
                 return 0;
 
             default: // Invalid option
-                print_help();
-                return 1;
+                print_help(argv[0]);
+                return 0;
         }
     }
 
@@ -137,7 +173,7 @@ int main(int argc, char *argv[]) {
         }
     } else if (optind >= argc) {
         fprintf(stderr, "Error: Missing required options.\n");
-        print_help();
+        print_help(argv[0]);
         return 1;
     }
 

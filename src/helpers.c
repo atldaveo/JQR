@@ -13,17 +13,21 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include "debug.h"
 
 /**
  * @brief Prints instructions on what the CMD Line input
  * for simple-calc ought to be. 
  * 
+ * @param Passes the name of the program (ie. the first CMD Line
+ * input) as argv[0] as a const char pointer so that it can't be
+ * altered. 
  */
 
-void print_help()
+void print_help(const char *programName)
 {
-    printf("Usage: simple-calc [OPTIONS]\n");
+    printf("Usage: %s [OPTIONS]\n", programName);
     printf("Options:\n");
     printf("  -a <num1> <num2>    Add two numbers\n");
     printf("  -s <num1> <num2>    Subtract two numbers\n");
@@ -43,3 +47,31 @@ void print_version()
     printf("simple-calc version 2.1\n");
     printf("Now includes other operators and better tests!\n");
 }
+
+/**
+ * @brief 
+ * 
+ * @param inputStr The CMD Line input operand.
+ * @return true The input is a valid, computable number. 
+ * @return false  The input is not a valid number.
+ */
+
+/*
+bool validate_inputStr(const char *inputStr)
+{
+    char *endptr;
+
+// If there is nothing in the operand input
+    if (NULL == inputStr || *inputStr == '\0')
+    {
+        return false;
+    }
+    else
+        return true;     
+}
+
+bool validate_inputLong(long num)
+{
+
+}
+*/
