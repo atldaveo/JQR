@@ -5,7 +5,7 @@
  * 
  * This program performs simple arithmetic calculations given user input via CLI.
  * 
- * @version 2.2
+ * @version 3.0
  * @date 2024-11-25
  *
  */
@@ -16,9 +16,41 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <errno.h>
+#include <string.h>
 #include "arithmetic.h"
 #include "debug.h"
 #include "helpers.h"
+
+typedef enum
+{
+    ADD,
+    SUBTRACT,
+    MULTIPLY,
+    DIVIDE,
+    INVALID
+} Operation;
+    
+Operation checkOperator(const char *operator)
+{
+    if (strcmp(operator, "+") == 0)
+    { 
+        return ADD;
+    }
+    else if (strcmp(operator, "-") == 0) 
+    {
+        return SUBTRACT;
+    }
+    else if (strcmp(operator, "x") == 0)
+    { 
+        return MULTIPLY;
+    }
+    else if (strcmp(operator, "/") == 0)
+    {
+        return DIVIDE;
+    }
+    else 
+        return INVALID;
+}
 
 /**
  * @brief Main function for the simple-calc program
@@ -29,29 +61,108 @@
  */
 
 int main(int argc, char *argv[]) {
-     
-    int opt = 0;
+
+    Operation operation;
+
+    //int opt = 0;
     long num1, num2;                /**< Numeric arguments will be converted to a long int. */
-    char operation = 0;             /**< Which operator we are going to use. */
-    bool has_numbers;               /**< Status: Does *argv have numbers? */
-    char *numEnd1, *numEnd2;        /**< Pointers to the ends of num1 and num2. */
-    
+    long result;
+    //char operation = 0;             /**< Which operator we are going to use. */
+    //bool has_numbers;               /**< Status: Does *argv have numbers? */
+    char *numEnd1, *numEnd2;        /**< Pointers to the ends of num1 and num2. */ 
+    bool argCheck;                  /**< Check number of CL arguments */
+    bool has_num1, has_num2, opCheck;        /**< Validate num1, num2, and operator */
+
     errno = 0;                      /**< Reset error number from (errno.h) */
     num1 = 0;                       /**< Initialize the variables. */
-    num2 = 0;                       /**< Initialize the variables. */
+    num2 = 0;                       /**< Initialize the variables. */    
 
- /**
- * @brief Parse command-line options using getopt.
- * 
- * Supported options:
- * - `-a` for addition
- * - `-s` for subtraction
- * - `-m` for multiplication
- * - `-d` for division
- * - `-h` for help
- * - `-v` for version
- */
+    // TODO: Right number of arguments
+    if (4 != argc) 
+    {
+        /*
+        for (int i = 0; i < argc; i++)
+        {
+            printf("argv[%d] = %s\n", i, argv[i]);
+        }
+        */
+        fprintf(stderr, "Argument Error! Reading %d of 4 required args\n", argc);
+        printf("Make sure you input the following:\n");
+        print_help(argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    else
+        argCheck = true;
 
+    // TODO: Is num1 valid?
+    num1 = strtol(argv[1], &numEnd1, 10);
+    if (0 != errno || '\0' != *numEnd1)   // Check for over/underflow and valid string 
+    {
+        fprintf(stderr, "'%s' is an invalid operand\n", argv[1]);
+        printf("Make sure you input the following:\n");
+        print_help(argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    else
+        has_num1 = true;
+
+    // TODO: Is num2 valid?
+    num2 = strtol(argv[3], &numEnd2, 10);
+    if (0 != errno || '\0' != *numEnd2)             
+    {
+        fprintf(stderr, "'%s' is an invalid operand\n", argv[3]);
+        printf("Make sure you input the following:\n");
+        print_help(argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    else
+        has_num2 = true;
+
+    // TODO: Is the operator valid?
+    operation = checkOperator(argv[2]);
+    if (operation == INVALID)
+    {
+        fprintf(stderr, "'%s' is an invalid operator\n", argv[2]);
+        printf("Make sure you input the following:\n");
+        print_help(argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    else
+        opCheck = true;
+
+    // TODO: Perform the calculation based on recognized operator
+    // TODO: Print the output  
+    if (true == argCheck && true == has_num1 && true == has_num2 && true == opCheck)
+    {    
+    //    long result;
+        switch (operation) 
+        {
+            case ADD:
+                result = add(num1, num2);
+                printf("%ld + %ld = %ld\n", num1, num2, result);
+                break;
+            case SUBTRACT:
+                result = subtract(num1, num2);
+                printf("%ld - %ld = %ld\n", num1, num2, result);
+                break;
+            case MULTIPLY:
+                result = multiply(num1, num2);
+                printf("%ld x %ld = %ld\n", num1, num2, result);
+                break;
+            case DIVIDE:
+                if (num2 == 0) {
+                    fprintf(stderr, "Error: Division by zero is not allowed.\n");
+                    return 1;
+                }
+                result = divide(num1, num2);
+                printf("%ld / %ld = %ld\n", num1, num2, result);
+                break;
+            default:
+                fprintf(stderr, "Invalid operation.\n");
+                return 1;
+        }
+    }
+/*
     while (-1 != (opt = getopt(argc, argv, "a:s:m:d:hv"))) // CMD Line options 
     {
         switch (opt) 
@@ -59,7 +170,7 @@ int main(int argc, char *argv[]) {
             case 'a': // Add
                 operation = 'a';
                 num1 = strtol(optarg, &numEnd1, 10);
-                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                if (0 != errno || '\0' != *numEnd1)   // Check for over/underflow and valid string 
                 {
                     fprintf(stderr, "'%s' is an invalid operand\n", optarg);
                     exit(EXIT_FAILURE);
@@ -76,7 +187,7 @@ int main(int argc, char *argv[]) {
             case 's': // Subtract
                 operation = 's';
                 num1 = strtol(optarg, &numEnd1, 10);
-                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                if (0 != errno || '\0' != *numEnd1)   // Check for over/underflow and valid string
                 {
                     fprintf(stderr, "'%s' is an invalid operand\n", optarg);
                     exit(EXIT_FAILURE);
@@ -93,7 +204,7 @@ int main(int argc, char *argv[]) {
             case 'm': // Multiply
                 operation = 'm';
                 num1 = strtol(optarg, &numEnd1, 10);
-                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                if (0 != errno || '\0' != *numEnd1)   // Check for over/underflow and valid string
                 {
                     fprintf(stderr, "'%s' is an invalid operand\n", optarg);
                     exit(EXIT_FAILURE);
@@ -110,7 +221,7 @@ int main(int argc, char *argv[]) {
             case 'd': // Divide
                 operation = 'd';
                 num1 = strtol(optarg, &numEnd1, 10);
-                if (0 != errno || '\0' != *numEnd1)   /**> Check for over/underflow and valid string */
+                if (0 != errno || '\0' != *numEnd1)   // Check for over/underflow and valid string
                 {
                     fprintf(stderr, "'%s' is an invalid operand\n", optarg);
                     exit(EXIT_FAILURE);
@@ -137,11 +248,9 @@ int main(int argc, char *argv[]) {
                 return 0;
         }
     }
+*/
 
-/**
- * @brief Perform the selected operation using the if-statement.
- * @param boolean variable `has_numbers` is true
- */
+/*
     if (has_numbers) 
     {
         long result;
@@ -171,11 +280,15 @@ int main(int argc, char *argv[]) {
                 fprintf(stderr, "Invalid operation.\n");
                 return 1;
         }
+    */
+
+/*
     } else if (optind >= argc) {
         fprintf(stderr, "Error: Missing required options.\n");
         print_help(argv[0]);
         return 1;
     }
+*/
 
     return 0;
 

@@ -40,7 +40,14 @@ void test_divide(void) {
     CU_ASSERT(divide(-5, -5) == 1);       // Negative-identity assertion
     CU_ASSERT_FALSE(divide(3,2) == 3);    // False Assertion
     CU_ASSERT(divide(0, 5) == 0);         // Zero Assertion
+    CU_ASSERT_FALSE(divide(4,0));         // Cannot divide by zero (should return error)
 }
+
+// Tests for correct input arguments
+// TODO: Check that num1 and num2 are convertable input strings.
+// TODO: Check that num1 and num2 are bounded by LONG_MIN and LONG_MAX.
+// TODO: There are only two operand arguments.  
+// TODO: Make sure there is a valid operator in between operands.
 
 int main() {
     // Initialize the CUnit test registry
