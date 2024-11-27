@@ -5,7 +5,7 @@
  * 
  * This program performs simple arithmetic calculations given user input via CLI.
  * 
- * @version 3.0
+ * @version 3.1
  * @date 2024-11-25
  *
  */
@@ -32,19 +32,19 @@ typedef enum
     
 Operation checkOperator(const char *operator)
 {
-    if (strcmp(operator, "+") == 0)
+    if (strncmp(operator, "+") == 0)
     { 
         return ADD;
     }
-    else if (strcmp(operator, "-") == 0) 
+    else if (strncmp(operator, "-") == 0) 
     {
         return SUBTRACT;
     }
-    else if (strcmp(operator, "x") == 0)
+    else if (strncmp(operator, "x") == 0)
     { 
         return MULTIPLY;
     }
-    else if (strcmp(operator, "/") == 0)
+    else if (strncmp(operator, "/") == 0)
     {
         return DIVIDE;
     }
@@ -73,11 +73,14 @@ int main(int argc, char *argv[]) {
     bool argCheck;                  /**< Check number of CL arguments */
     bool has_num1, has_num2, opCheck;        /**< Validate num1, num2, and operator */
 
-    errno = 0;                      /**< Reset error number from (errno.h) */
-    num1 = 0;                       /**< Initialize the variables. */
-    num2 = 0;                       /**< Initialize the variables. */    
+    errno = 0;                      
+    num1 = 0;                       
+    num2 = 0;                       
 
-    // TODO: Right number of arguments
+   /**
+    * @brief Checks to make sure there should only be four total arguments. 
+    * 
+    */
     if (4 != argc) 
     {
         /*
@@ -96,7 +99,7 @@ int main(int argc, char *argv[]) {
 
     // TODO: Is num1 valid?
     num1 = strtol(argv[1], &numEnd1, 10);
-    if (0 != errno || '\0' != *numEnd1)   // Check for over/underflow and valid string 
+    if (0 != errno || '\0' != *numEnd1)   // Check for over/underflow and validity of string 
     {
         fprintf(stderr, "'%s' is an invalid operand\n", argv[1]);
         printf("Make sure you input the following:\n");
@@ -147,7 +150,7 @@ int main(int argc, char *argv[]) {
                 break;
             case MULTIPLY:
                 result = multiply(num1, num2);
-                printf("%ld x %ld = %ld\n", num1, num2, result);
+                printf("%ld * %ld = %ld\n", num1, num2, result);
                 break;
             case DIVIDE:
                 if (num2 == 0) {
