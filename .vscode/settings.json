@@ -1,6 +1,12 @@
 {
     "files.associations": {
         "stdbool.h": "c",
-        "arithmetic.h": "c"
-    }
+        "arithmetic.h": "c",
+        "compare": "c",
+        "cstdint": "c",
+        "stdio.h": "c",
+        "functional": "c"
+    },
+    "makefile.configureOnOpen": false,
+    "C_Cpp.errorSquiggles": "disabled"
 }

@@ -2,7 +2,7 @@
 #include <CUnit/Basic.h>
 #include "arithmetic.h"
 
-// Tests for add function
+// Tests for add function 
 void test_add(void) {
     CU_ASSERT(add(1, 2) == 3);          // Positive assertion 
     CU_ASSERT(add(100, 200) == 300);    // Larger Positive assertion
@@ -24,23 +24,23 @@ void test_subtract(void) {
 
 // Tests for multiply function
 void test_multiply(void) {
-    CU_ASSERT(multiply(5, 3) == 15);            // Positive assertion 
-    CU_ASSERT(multiply(500, 300) == 150000);    // Larger Positive assertion
-    CU_ASSERT(multiply(-5, 3) == -15);          // Negative assertion
-    CU_ASSERT(multiply(-5, 1) == -5);           // Negative-identity assertion
-    CU_ASSERT_FALSE(multiply(3,2) == 3);        // False Assertion
-    CU_ASSERT(multiply(0, 5) == 0);             // Zero Assertion
+    CU_ASSERT(multiply(5, 3) == 15);            /**< Positive assertion */
+    CU_ASSERT(multiply(500, 300) == 150000);    /**< Larger Positive assertion */
+    CU_ASSERT(multiply(-5, 3) == -15);          /**< Negative assertion */
+    CU_ASSERT(multiply(-5, 1) == -5);           /**< Negative-identity assertion */
+    CU_ASSERT_FALSE(multiply(3,2) == 3);        /**< False Assertion */
+    CU_ASSERT(multiply(0, 5) == 0);             /**< Zero Assertion */
 }
 
 // Tests for divide function
 void test_divide(void) {
-    CU_ASSERT(divide(6, 3) == 2);         // Positive assertion 
-    CU_ASSERT(divide(600, 200) == 3);     // Larger Positive assertion
-    CU_ASSERT(divide(-10, 2) == -5);      // Negative assertion
-    CU_ASSERT(divide(-5, -5) == 1);       // Negative-identity assertion
-    CU_ASSERT_FALSE(divide(3,2) == 3);    // False Assertion
-    CU_ASSERT(divide(0, 5) == 0);         // Zero Assertion
-    CU_ASSERT_FALSE(divide(4,0));         // Cannot divide by zero (should return error)
+    CU_ASSERT(divide(6, 3) == 2);                   /**< Positive assertion  */
+    CU_ASSERT(divide(600, 200) == 3);               /**< Larger Positive assertion */
+    CU_ASSERT(divide(-10, 2) == -5);                /**< Negative assertion */
+    CU_ASSERT(divide(-5, -5) == 1);                 /**< Negative-identity assertion */
+    CU_ASSERT_FALSE(divide(3,2) == 3);              /**< False Assertion */
+    CU_ASSERT(divide(0, 5) == 0);                   /**< Zero Assertion */
+    CU_ASSERT_EQUAL_FATAL(divide(4,0), -1);         /**< Cannot divide by zero (should return -1) */
 }
 
 // Tests for correct input arguments

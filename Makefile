@@ -44,7 +44,11 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 
 # Test build
 test: $(TEST_TARGET)
-	./$(TEST_TARGET)
+	@set -f; ./$(TEST_TARGET)
+
+# Run the main target
+run: $(TARGET)
+	@set -f; ./$(TARGET)
 
 # Build the test executable
 $(TEST_TARGET): $(SRCDIR)/arithmetic.c $(TESTDIR)/test_arithmetic.c
