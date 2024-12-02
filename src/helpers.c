@@ -1,3 +1,14 @@
+/**
+ * @file helpers.c
+ * @author David Chung (david.chung1719@outlook.com)
+ * @brief Defines maintenance functions used in main.c
+ * @version 0.1
+ * @date 02Dec24
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdbool.h>
@@ -10,7 +21,7 @@
  * @param programName Same as argv[0]. 
  */
 
-void print_help(const char *programName)
+void printHelp(const char *programName)
 {
     printf("Usage: %s [OPTIONS]\n", programName);
     printf("Options:\n");
@@ -27,7 +38,7 @@ void print_help(const char *programName)
  * 
  */
 
-void print_version() 
+void printVersion() 
 {
     printf("simple-calc version 2.5\n");
     printf("Now includes other operators and more flexibility\n");

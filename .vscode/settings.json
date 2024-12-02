@@ -5,7 +5,8 @@
         "compare": "c",
         "cstdint": "c",
         "stdio.h": "c",
-        "functional": "c"
+        "functional": "c",
+        "unistd.h": "c"
     },
     "makefile.configureOnOpen": false,
     "C_Cpp.errorSquiggles": "disabled"

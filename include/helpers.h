@@ -23,14 +23,14 @@
  * altered. 
  */
 
-void print_help(const char *programName);
+void printHelp(const char *programName);
 
 /**
  * @brief Prints the version information for simple-calc.
  * 
  */
 
-void print_version();
+void printVersion();
 
 //enum Operation checkOperator(const char *operator);
 

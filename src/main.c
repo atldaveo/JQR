@@ -10,13 +10,9 @@
  * 
  */
 
-// TODO: Make the program more modular. Suggest using for-loop to iterate
+// TODO: Make the program more modular. Maybe use for-loop to iterate
 // through CMD Line arguments instead of just checking the first four string
 // arguments for valid input.  
-
-// TODO: Debug the "*" error from CMD Line. Prevent opening of the
-// src files.
-
                                                                             
 #include <stdio.h>
 #include <stdlib.h>
@@ -87,38 +83,36 @@ Operation checkOperator(const char *operator)
 
 int main(int argc, char *argv[]) 
 {
-#define ARGCOUNT 4                     /**< Using constant at beginning of code for modularity */
+    #define ARGCOUNT 4                          /**< Using constant at beginning of code for modularity */ 
 
-if (ARGCOUNT != argc)
-{
-    fprintf(stderr, "Expected %d arguments instead passed %d\n", ARGCOUNT, argc);
-    exit(EXIT_FAILURE);
-} 
-    
-    
-
-    bool hasNum1 = false;
+    bool hasNum1 = false;                       /**< Validation gates to ensure good arguments */
     bool hasNum2 = false;
     bool opCheck = false;        
     bool argCheck = false;
-    int32_t num1 = 0;                           /**< Variable that will hold an operand with MAX 32 bits  */
-    int32_t num2 = 0;                           /**< Variable that will hold an operand with MAX 32 bits  */
-    int32_t result = 0;
-    //int32_t final = 0;                          /**< Variable that will hold the result of arithmetic OPN with MAX 32 bits */
-    char *numEnd1, *numEnd2;                    /**< Pointers to the ends of num1 and num2. */                               
+    int32_t num1 = 0;                           /**< Variable that will hold an operand with MAX 32 bits */
+    int32_t num2 = 0;                           /**< Variable that will hold an operand with MAX 32 bits */
+    int32_t result = 0;                         /**< Variable that will hold the resulting calculated number */
+    char *numEnd1 = NULL;                       /**< Pointer to the end of num1 */
+    char *numEnd2 = NULL;                       /**< Pointer to the end of num2 */                               
     
     Operation operation;                        
-    errno = 0;                                          
+    errno = 0;                                  /**< Reset errno */
+
     /**
     * @brief Error-checking for number of CMD Line arguments
-    * Should be 4 <filename> <operand> <Operator> <operand>
+    * Should be 4 <filename> <operand> <operator> <operand>
     */
 
     if (ARGCOUNT != argc)                                  
     {
         fprintf(stderr, "Argument Error! Reading %d of %d required args\n", argc, ARGCOUNT);
-        printf("See below for troubleshooting\n");
-        print_help(argv[0]);
+        // Handle wildcard expansion / globbing 
+        if (argc > ARGCOUNT)            
+        {
+            fprintf(stderr, "Likely encountered wildcard expansion. Precede CLI command with commmand 'set -f'\n");
+        } 
+        printf("See below for more troubleshooting\n");
+        printHelp(argv[0]);
         exit(EXIT_FAILURE);
     }
     else
@@ -134,7 +128,7 @@ if (ARGCOUNT != argc)
     {
         fprintf(stderr, "'%s' is an invalid operand\n", argv[1]);
         printf("Make sure you input the following:\n");
-        print_help(argv[0]);
+        printHelp(argv[0]);
         exit(EXIT_FAILURE);
     }
     else
@@ -150,7 +144,7 @@ if (ARGCOUNT != argc)
     {
         fprintf(stderr, "'%s' is an invalid operand\n", argv[3]);
         printf("Make sure you input the following:\n");
-        print_help(argv[0]);
+        printHelp(argv[0]);
         exit(EXIT_FAILURE);
     }
     else
@@ -167,7 +161,7 @@ if (ARGCOUNT != argc)
     {
         fprintf(stderr, "'%s' is an invalid operator\n", argv[2]);
         printf("Make sure you input the following:\n");
-        print_help(argv[0]);
+        printHelp(argv[0]);
         exit(EXIT_FAILURE);
     }
     else

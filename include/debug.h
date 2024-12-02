@@ -1,3 +1,14 @@
+/**
+ * @file debug.h
+ * @author David Chung (david.chung1719@outlook.com)
+ * @brief Outlines capabilities when running the main code in DEBUG mode.
+ * @version 0.1
+ * @date 02Dec24
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #ifndef DEBUG_H
 #define DEBUG_H
 

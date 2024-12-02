@@ -1,48 +1,93 @@
+/**
+ * @file arithmetic.c
+ * @author David Chung (david.chung1719@outlook.com)
+ * @brief Defines the different arithmetic operations used in main.c
+ * @version 3.0
+ * @date 02Dec24
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <stdint.h>
 #include "arithmetic.h"
 #include "debug.h"
 
-int add(int32_t x, int32_t y)
+int32_t add(int32_t x, int32_t y)
 {
-    DEBUG_PRINT("%d + %d", x, y);
-    return x + y;
+    // Check for overflow
+    if (0 < x && 0 < y && (INT32_MAX - y) < x) 
+    {
+        fprintf(stderr, "Overflow: Result is too large\n");
+        return -1;
+    }
+    // Check for underflow
+    else if (0 > x && 0 > y && (INT32_MIN - y) > x) 
+    {
+        fprintf(stderr, "Underflow: Result is too low\n");
+        return -1;
+    }
+    else
+        return x + y;
 }
 
-int subtract(int32_t x, int32_t y)
+int32_t subtract(int32_t x, int32_t y)
 {
-    return x - y;
+    // Check for overflow
+    if (0 < y && (INT32_MIN + y) > x)   
+    {
+        fprintf(stderr, "Overflow: Result is too large\n");
+        return -1;
+    }
+    // Check for underflow
+    else if (y < 0 && x > INT32_MAX + y) 
+    { 
+        fprintf(stderr, "Underflow: Result is too low\n");
+        return -1;
+    }
+    else
+        return x - y;
 }
 
-int multiply(int32_t x, int32_t y)
+int32_t multiply(int32_t x, int32_t y)
 {
-    return x * y;
+    // Overflow check with two positive arguments  
+    if (0 < x && 0 < y && (INT32_MAX / y) < x) 
+    {  
+        fprintf(stderr, "Overflow: Result is too large\n");
+        return -1;
+    }
+    // Overflow check with two negative arguments
+    else if (0 > x && 0 > y && (INT32_MAX / y) > x) 
+    {
+        fprintf(stderr, "Overflow: Result will be too large\n");
+        return -1;
+    }
+    // Underflow check 
+    else if ((0 < x && 0 > y && (INT32_MIN / x) > y) ||         /**> Positive x, Negative y */
+            (0 > x && 0 < y && (INT32_MIN / y) > x))            /**> Negative x, Positive y */
+    {     
+        fprintf(stderr, "Underflow: Result will be too low\n");
+        return -1;
+    }
+    else
+        return x * y;
 }
 
-int divide(int32_t x, int32_t y)
+int32_t divide(int32_t x, int32_t y)
 {
-    if (0 == y)                 /** Prevent division by zero */
-        {
-            return -1;
-        }
+    // Prevent division by 0
+    if (0 == y)                 
+    {
+        fprintf(stderr, "Can't divide by 0!");
+        return -1;
+    }
+    // Overflow check
+    else if (INT32_MIN == x && -1 == y) 
+    {  
+        fprintf(stderr, "Overflow: Result is too large\n");
+        return -1;
+    }
     else
         return x / y;
 }
-
-#if 0
-int add(int32_t x, int32_t y, int32_t *res) 
-{
-    // check if overflow / underflow, if so, return -1
-    // otherwise, put x + y in *res
-    // return 0 (success)
-}
-
-int32_t res = 0; // initialize
-if (add(x, y, &res) == -1)
-{
-    // error occurred
-}
-else 
-{
-    printf("res;ult: %d", res)
-}
-#endif
