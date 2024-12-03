@@ -15,40 +15,46 @@
  * 
  * @param x First number in addition sequence.
  * @param y Second number in addition sequence.
- * @return int Sum of the argument values.
+ * @param res Pointer pointing to the portion of memory holding the result of the calculation.
+ * @return int32_t On success, returns a 0. Otherwise, return -1.
  */
 
-int add(int x, int y);
+int32_t add(int32_t x, int32_t y, int32_t *res);
 
 /**
  * @brief Subtraction function.
  * 
  * @param x First number in subtraction sequence.
  * @param y Second number in subtraction sequence.
- * @return int Difference of the argument values.
+ * @param res Pointer pointing to the portion of memory holding the result of the calculation.
+ * @return int32_t On success, returns a 0. Otherwise, return -1.
+ * 
  */
 
-int subtract(int x, int y);
+int32_t subtract(int32_t x, int32_t y, int32_t *res);
 
 /**
  * @brief Multiplication function.
  * 
  * @param x First number in multiplication sequence.
  * @param y Second number in multiplication sequence.
- * @return int Product of the argument values.
+ * @param res Pointer pointing to the portion of memory holding the result of the calculation.
+ * @return int32_t On success, returns a 0. Otherwise, return -1.
  */
 
-int multiply(int x, int y);
+int32_t multiply(int32_t x, int32_t y, int32_t *res);
 
 /**
- * @brief Division function.
+ * @brief Division function. Integrates error-handling for overflow, underflow, 0 dividend,
+ *  and null ptr
  * 
  * @param x First number in division sequence.
  * @param y Second number in division sequence.
- * @return int Quotient of the argument values.
+ * @param res Pointer pointing to the portion of memory holding the result of the calculation.
+ * @return int32_t On success, returns a 0. Otherwise, return -1.
  */
 
-int divide(int x, int y); 
+int32_t divide(int32_t x, int32_t y, int32_t *res); 
 
 
 #endif

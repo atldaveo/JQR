@@ -43,9 +43,9 @@ typedef enum
  * @return Operation determines which arithmetic operation to execute
  */
 
-Operation checkOperator(const char *operator)
+Operation check_operator(const char *operator)
 {
-    if  (0 != operator && 1 == strlen(operator))
+    if ((NULL != operator) && (1 == strlen(operator)))
     {
         if (0 == strncmp(operator, "+", 1))
         { 
@@ -55,7 +55,7 @@ Operation checkOperator(const char *operator)
         {
             return SUBTRACT;
         }
-        else if (0 == strncmp(operator, "x", 1) || 0 == strncmp(operator, "*", 1))
+        else if ((0 == strncmp(operator, "x", 1)) || (0 == strncmp(operator, "*", 1)))
         { 
             return MULTIPLY;
         }
@@ -63,8 +63,10 @@ Operation checkOperator(const char *operator)
         {
             return DIVIDE;
         }
-        else 
+        else
+        { 
             return INVALID;
+        }
     }
     else
     {
@@ -81,21 +83,22 @@ Operation checkOperator(const char *operator)
  * @return int 0 if successful.
  */
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
     #define ARGCOUNT 4                          /**< Using constant at beginning of code for modularity */ 
 
-    bool hasNum1 = false;                       /**< Validation gates to ensure good arguments */
-    bool hasNum2 = false;
-    bool opCheck = false;        
-    bool argCheck = false;
+    bool has_num1 = false;                      /**< Validation gates to ensure good arguments */
+    bool has_num2 = false;
+    bool op_check = false;        
+    bool arg_check = false;
     int32_t num1 = 0;                           /**< Variable that will hold an operand with MAX 32 bits */
     int32_t num2 = 0;                           /**< Variable that will hold an operand with MAX 32 bits */
-    int32_t result = 0;                         /**< Variable that will hold the resulting calculated number */
-    char *numEnd1 = NULL;                       /**< Pointer to the end of num1 */
-    char *numEnd2 = NULL;                       /**< Pointer to the end of num2 */                               
+    int32_t result = 0;                         /**< Pointer to the location of arithmetic results */
+    int32_t state = 0;                          /**< Variable holding the return value for arithmetic functions */
+    char *num_end1 = NULL;                      /**< Pointer to the end of num1 */
+    char *num_end2 = NULL;                      /**< Pointer to the end of num2 */                               
     
-    Operation operation;                        
+    Operation operation = {0};                        
     errno = 0;                                  /**< Reset errno */
 
     /**
@@ -112,60 +115,67 @@ int main(int argc, char *argv[])
             fprintf(stderr, "Likely encountered wildcard expansion. Precede CLI command with commmand 'set -f'\n");
         } 
         printf("See below for more troubleshooting\n");
-        printHelp(argv[0]);
+        print_help(argv[0]);
         exit(EXIT_FAILURE);
     }
     else
-        argCheck = true;
-    
+    {
+        arg_check = true;
+    }
 /**
  * @brief Error-checking for valid first operand <num1> 
  * 
  */
 
-    num1 = strtol(argv[1], &numEnd1, 10);
-    if (0 != errno || '\0' != *numEnd1)     /**< Check for over/underflow and validity of string */
+    num1 = strtol(argv[1], &num_end1, 10);
+    if (0 != errno || '\0' != *num_end1)     /**< Check for over/underflow and validity of string */
     {
         fprintf(stderr, "'%s' is an invalid operand\n", argv[1]);
         printf("Make sure you input the following:\n");
-        printHelp(argv[0]);
+        print_help(argv[0]);
         exit(EXIT_FAILURE);
     }
     else
-        hasNum1 = true;
+    {
+        has_num1 = true;
+    }
 
 /**
  * @brief Error-checking for valid first operand <num1> 
  * 
  */
 
-    num2 = strtol(argv[3], &numEnd2, 10);
-    if (0 != errno || '\0' != *numEnd2)     /**< Check for over/underflow and validity of string */
+    num2 = strtol(argv[3], &num_end2, 10);
+    if ((0 != errno) || ('\0' != *num_end2))     /**< Check for over/underflow and validity of string */
     {
         fprintf(stderr, "'%s' is an invalid operand\n", argv[3]);
         printf("Make sure you input the following:\n");
-        printHelp(argv[0]);
+        print_help(argv[0]);
         exit(EXIT_FAILURE);
     }
     else
-        hasNum2 = true;
+    {
+        has_num2 = true;
+    }
 
 /**
  * @brief Error-checking for valid arithmetic operator 
  * 
  */
 
-    operation = checkOperator(argv[2]);
+    operation = check_operator(argv[2]);
 
     if (operation == INVALID)
     {
         fprintf(stderr, "'%s' is an invalid operator\n", argv[2]);
         printf("Make sure you input the following:\n");
-        printHelp(argv[0]);
+        print_help(argv[0]);
         exit(EXIT_FAILURE);
     }
     else
-        opCheck = true;
+    {
+        op_check = true;
+    }
 
 /**
  * @brief Based on passing error-checks, execute the proper arithmetic
@@ -176,31 +186,58 @@ int main(int argc, char *argv[])
  * of the code. 
  */
 
-    if (argCheck && hasNum1 && hasNum2 && opCheck)
+    if ((true == arg_check) && (true == has_num1) && (true == has_num2) && (true == op_check))
     {    
         switch (operation) 
         {
             case ADD:
-                result = add(num1, num2);
-                printf("%d + %d = %d\n", num1, num2, result);
-                break;
-            case SUBTRACT:
-                result = subtract(num1, num2);
-                printf("%d - %d = %d\n", num1, num2, result);
-                break;
-            case MULTIPLY:
-                result = multiply(num1, num2);
-                printf("%d * %d = %d\n", num1, num2, result);
-                break;
-            case DIVIDE:
-                if (num2 == 0) 
+                state = add(num1, num2, &result);
+                if (0 == state)
                 {
-                    fprintf(stderr, "Error: Division by zero is not allowed.\n");
+                    printf("%d + %d = %d\n", num1, num2, result);
+                    break;
+                }
+                else
+                {
+                    fprintf(stderr, "Operation invalid. Review your work\n");
                     exit(EXIT_FAILURE);
                 }
-                result = divide(num1, num2);
-                printf("%d / %d = %d\n", num1, num2, result);
-                break;
+            case SUBTRACT:
+                state = subtract(num1, num2, &result);
+                if (0 == state)
+                {
+                    printf("%d - %d = %d\n", num1, num2, result);
+                    break;
+                }
+                else
+                {
+                    fprintf(stderr, "Operation invalid. Review your work\n");
+                    exit(EXIT_FAILURE);
+                }
+            case MULTIPLY:
+                state = multiply(num1, num2, &result);
+                if (0 == state)
+                {
+                    printf("%d * %d = %d\n", num1, num2, result);
+                    break;
+                }
+                else
+                {
+                    fprintf(stderr, "Operation invalid. Review your work\n");
+                    exit(EXIT_FAILURE);
+                }
+            case DIVIDE:
+                state = divide(num1, num2, &result);
+                if (0 == state)
+                {
+                    printf("%d / %d = %d\n", num1, num2, result);
+                    break;
+                }
+                else
+                {
+                    fprintf(stderr, "Operation invalid. Review your work\n");
+                    exit(EXIT_FAILURE);
+                }
             default:
                 fprintf(stderr, "Invalid operation.\n");
                 exit(EXIT_FAILURE);

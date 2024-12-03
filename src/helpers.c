@@ -18,12 +18,12 @@
 /**
  * @brief Prints a guide on using simple-calc.
  * 
- * @param programName Same as argv[0]. 
+ * @param program_name Same as argv[0]. 
  */
 
-void printHelp(const char *programName)
+void print_help(const char *program_name)
 {
-    printf("Usage: %s [OPTIONS]\n", programName);
+    printf("Usage: %s [OPTIONS]\n", program_name);
     printf("Options:\n");
     printf("  <num1> + <num2>     Add two numbers\n");
     printf("  <num1> - <num2>     Subtract two numbers\n");
@@ -38,7 +38,7 @@ void printHelp(const char *programName)
  * 
  */
 
-void printVersion() 
+void print_version() 
 {
     printf("simple-calc version 2.5\n");
     printf("Now includes other operators and more flexibility\n");
