@@ -106,6 +106,20 @@ void test_divide(void)
     CU_ASSERT(0 == res);
 }
 
+void test_shift_right(void)
+{
+    int32_t res = 0;
+
+    // TODO: Add test conditions
+}
+
+void test_shift_left(void)
+{
+    int32_t res = 0;
+
+    // TODO: Add test conditions
+}
+
 int main() 
 {
     // Initialize the CUnit test registry
@@ -126,7 +140,10 @@ int main()
     if ((CU_add_test(suite, "Test Add Function", test_add) == NULL) ||
         (CU_add_test(suite, "Test Subtract Funtion", test_subtract) == NULL) ||
         (CU_add_test(suite, "Test Multiply Function", test_multiply) == NULL) || 
-        (CU_add_test(suite, "Test Divide Function", test_divide) == NULL))
+        (CU_add_test(suite, "Test Divide Function", test_divide) == NULL) ||
+        (CU_add_test(suite, "Test Shift Right Function", test_shift_right) == NULL) ||
+        (CU_add_test(suite, "Test Shift Left Function", test_shift_left) == NULL)
+        )
     {
         CU_cleanup_registry();
         return CU_get_error();

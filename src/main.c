@@ -31,6 +31,8 @@ typedef enum
     SUBTRACT,
     MULTIPLY,
     DIVIDE,
+    RIGHTSHIFT,
+    LEFTSHIFT,
     INVALID
 } Operation;
 
@@ -45,27 +47,37 @@ typedef enum
 
 Operation check_operator(const char *operator)
 {
-    if ((NULL != operator) && (1 == strlen(operator)))
+    if (NULL != operator)
     {
-        if (0 == strncmp(operator, "+", 1))
-        { 
-            return ADD;
-        }
-        else if (0 == strncmp(operator, "-", 1)) 
+        if (1 == strlen(operator))    
         {
-            return SUBTRACT;
+            if (0 == strncmp(operator, "+", 1))
+            { 
+                return ADD;
+            }
+            else if (0 == strncmp(operator, "-", 1)) 
+            {
+                return SUBTRACT;
+            }
+            else if ((0 == strncmp(operator, "x", 1)) || (0 == strncmp(operator, "*", 1)))
+            { 
+                return MULTIPLY;
+            }
+            else if (0 == strncmp(operator, "/", 1))
+            {
+                return DIVIDE;
+            }
         }
-        else if ((0 == strncmp(operator, "x", 1)) || (0 == strncmp(operator, "*", 1)))
-        { 
-            return MULTIPLY;
-        }
-        else if (0 == strncmp(operator, "/", 1))
+        else if (2 == strlen(operator))
         {
-            return DIVIDE;
-        }
-        else
-        { 
-            return INVALID;
+            if (0 == strncmp(operator, ">>", 2))
+            {
+                return RIGHTSHIFT;
+            }
+            else if (0 == strncmp(operator, "<<", 2))
+            {
+                return LEFTSHIFT;
+            }
         }
     }
     else
@@ -73,6 +85,8 @@ Operation check_operator(const char *operator)
         fprintf(stderr, "Invalid operator\n");
         return INVALID;
     }
+    fprintf(stderr, "Invalid operator\n");
+    return INVALID;
 }
 
 /**
@@ -96,7 +110,8 @@ int main(int argc, char *argv[])
     int32_t result = 0;                         /**< Pointer to the location of arithmetic results */
     int32_t state = 0;                          /**< Variable holding the return value for arithmetic functions */
     char *num_end1 = NULL;                      /**< Pointer to the end of num1 */
-    char *num_end2 = NULL;                      /**< Pointer to the end of num2 */                               
+    char *num_end2 = NULL;                      /**< Pointer to the end of num2 */
+    int rc = -1;                                /**< Initiate 'return code' as fail - enable single exit point */                                
     
     Operation operation = {0};                        
     errno = 0;                                  /**< Reset errno */
@@ -112,11 +127,11 @@ int main(int argc, char *argv[])
         // Handle wildcard expansion / globbing 
         if (argc > ARGCOUNT)            
         {
-            fprintf(stderr, "Likely encountered wildcard expansion. Precede CLI command with commmand 'set -f'\n");
+            fprintf(stderr, "Likely encountered wildcard expansion. Precede CLI command with 'set -f'\n");
         } 
         printf("See below for more troubleshooting\n");
         print_help(argv[0]);
-        exit(EXIT_FAILURE);
+        goto end;
     }
     else
     {
@@ -133,7 +148,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "'%s' is an invalid operand\n", argv[1]);
         printf("Make sure you input the following:\n");
         print_help(argv[0]);
-        exit(EXIT_FAILURE);
+        goto end;
     }
     else
     {
@@ -151,7 +166,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "'%s' is an invalid operand\n", argv[3]);
         printf("Make sure you input the following:\n");
         print_help(argv[0]);
-        exit(EXIT_FAILURE);
+        goto end;
     }
     else
     {
@@ -170,7 +185,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "'%s' is an invalid operator\n", argv[2]);
         printf("Make sure you input the following:\n");
         print_help(argv[0]);
-        exit(EXIT_FAILURE);
+        goto end;
     }
     else
     {
@@ -195,53 +210,89 @@ int main(int argc, char *argv[])
                 if (0 == state)
                 {
                     printf("%d + %d = %d\n", num1, num2, result);
+                    rc = 0;
                     break;
                 }
                 else
                 {
                     fprintf(stderr, "Operation invalid. Review your work\n");
-                    exit(EXIT_FAILURE);
+                    break;
                 }
             case SUBTRACT:
                 state = subtract(num1, num2, &result);
                 if (0 == state)
                 {
                     printf("%d - %d = %d\n", num1, num2, result);
+                    rc = 0;
                     break;
                 }
                 else
                 {
                     fprintf(stderr, "Operation invalid. Review your work\n");
-                    exit(EXIT_FAILURE);
+                    break;
                 }
             case MULTIPLY:
                 state = multiply(num1, num2, &result);
                 if (0 == state)
                 {
                     printf("%d * %d = %d\n", num1, num2, result);
+                    rc = 0;
                     break;
                 }
                 else
                 {
                     fprintf(stderr, "Operation invalid. Review your work\n");
-                    exit(EXIT_FAILURE);
+                    break;
                 }
             case DIVIDE:
                 state = divide(num1, num2, &result);
                 if (0 == state)
                 {
                     printf("%d / %d = %d\n", num1, num2, result);
+                    rc = 0;
+                    break;
+                }
+                else
+                {
+                    fprintf(stderr, "Operation invalid. Review your work\n"); 
+                    break;
+                }
+            case RIGHTSHIFT:
+                state = shift_right(num1, num2, &result);
+                if (0 == state)
+                {
+                    printf("%d >> %d = %d\n", num1, num2, result);
+                    rc = 0;
                     break;
                 }
                 else
                 {
                     fprintf(stderr, "Operation invalid. Review your work\n");
-                    exit(EXIT_FAILURE);
+                    break;
+                }
+            case LEFTSHIFT:
+                state = shift_left(num1, num2, &result);
+                if (0 == state)
+                {
+                    printf("%d << %d = %d\n", num1, num2, result);
+                    rc = 0;
+                    break;
+                }
+                else
+                {
+                    fprintf(stderr, "Operation invalid. Review your work\n");
+                    break;
                 }
             default:
                 fprintf(stderr, "Invalid operation.\n");
-                exit(EXIT_FAILURE);
+                break;
         }
     }
-    return 0;
+    else
+    {
+        goto end;
+    }
+// Single Exit Point
+end:
+    return rc;
 }

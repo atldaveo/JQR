@@ -56,5 +56,26 @@ int32_t multiply(int32_t x, int32_t y, int32_t *res);
 
 int32_t divide(int32_t x, int32_t y, int32_t *res); 
 
+/**
+ * @brief Shift Right function
+ * 
+ * @param num Number to be shifted.
+ * @param space Number of bits to be shifted by.
+ * @param res Pointer pointing to the portion of memory holding the result of the calculation.
+ * @return int32_t On success, returns a 0. Otherwise, return -1.
+ */
+
+int32_t shift_right(int32_t num, int32_t space, int32_t *res);
+
+/**
+ * @brief Shift Left function
+ * 
+ * @param num Number to be shifted.
+ * @param space Number of bits to be shifted by.
+ * @param res Pointer pointing to the portion of memory holding the result of the calculation.
+ * @return int32_t On success, returns a 0. Otherwise, return -1.
+ */
+
+int32_t shift_left(int32_t num, int32_t space, int32_t *res);
 
 #endif

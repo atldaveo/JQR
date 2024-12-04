@@ -29,6 +29,8 @@ void print_help(const char *program_name)
     printf("  <num1> - <num2>     Subtract two numbers\n");
     printf("  <num1> * <num2>     Multiply two numbers\n");
     printf("  <num1> / <num2>     Divide two numbers\n");
+    printf("  <num> >> <space>    Right shift a number by space(s)\n");
+    printf("  <num> << <space>    Left shift a number by space(s)\n");
     printf("  -h                  Show this help message\n");
     printf("  -v                  Show version information\n");
 }

@@ -121,9 +121,58 @@ int32_t divide(int32_t x, int32_t y, int32_t *res)
         fprintf(stderr, "\nOverflow: Result is too large\n");
         return -1;
     }
+    else if (0 != (x % y))
+    {
+        fprintf(stderr, "\nCan't divide into fractions yet\n");
+        return -1;
+    }
     else
     {
         *res = x / y;       /**< Allows for the result to be stored in memory location &res */
         return 0;          
+    }
+}
+
+int32_t shift_right(int32_t num, int32_t space, int32_t *res)
+{
+    // Invalid shift spacing
+    if ((32 <= space) || (0 > space))
+    {
+        fprintf(stderr, "Invalid shift");
+        return -1;
+    }
+    // Right shifting negative numbers
+    else if (0 > num)
+    {
+        fprintf(stderr, "Cannot right shift negative numbers!");
+        return -1;
+    }
+    // Upon input validation
+    else
+    {
+        *res = num >> space;
+        return 0;
+    }
+}
+
+int32_t shift_left(int32_t num, int32_t space, int32_t *res)
+{
+    // Invalid shift spacing
+    if ((0 > space) || (32 <= space))
+    {
+        fprintf(stderr, "Invalid shift!");
+        return -1; 
+    }
+    // Overflow handling
+    else if (INT32_MAX <= num)
+    {
+        fprintf(stderr, "Invalid shift: Overflow!");
+        return -1;
+    }
+    // Upon input validation
+    else
+    {
+        *res = num << space;
+        return 0;
     }
 }
