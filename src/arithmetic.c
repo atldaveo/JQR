@@ -136,15 +136,20 @@ int32_t divide(int32_t x, int32_t y, int32_t *res)
 int32_t shift_right(int32_t num, int32_t space, int32_t *res)
 {
     // Invalid shift spacing
-    if ((32 <= space) || (0 > space))
+    if (32 <= space)
     {
-        fprintf(stderr, "Invalid shift");
+        fprintf(stderr, "Can't shift that far!\n");
+        return -1;
+    }
+    else if (0 > space)
+    {
+        fprintf(stderr, "Can't shift by a negative number!\n");
         return -1;
     }
     // Right shifting negative numbers
     else if (0 > num)
     {
-        fprintf(stderr, "Cannot right shift negative numbers!");
+        fprintf(stderr, "Cannot right shift negative numbers!\n");
         return -1;
     }
     // Upon input validation
@@ -158,15 +163,20 @@ int32_t shift_right(int32_t num, int32_t space, int32_t *res)
 int32_t shift_left(int32_t num, int32_t space, int32_t *res)
 {
     // Invalid shift spacing
-    if ((0 > space) || (32 <= space))
+    if (32 <= space)
     {
-        fprintf(stderr, "Invalid shift!");
-        return -1; 
+        fprintf(stderr, "Can't shift that far!\n");
+        return -1;
+    }
+    else if (0 > space)
+    {
+        fprintf(stderr, "Can't shift by a negative number!\n");
+        return -1;
     }
     // Overflow handling
     else if (INT32_MAX <= num)
     {
-        fprintf(stderr, "Invalid shift: Overflow!");
+        fprintf(stderr, "Invalid shift: Overflow!\n");
         return -1;
     }
     // Upon input validation
