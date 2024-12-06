@@ -7,7 +7,7 @@ def generate_random_argument():
     int32_max = 2**31 - 1
     num1 = random.randint(int32_min, int32_max)
     num2 = random.randint(int32_min, int32_max)
-    operator = random.choice(['+', '-', '*', '/', '>>', '<<'])
+    operator = random.choice(['+', '-', '*', '/', '>>', '<<', 'x'])
     return num1, operator, num2
 
 def run_simple_calc(executable_path):

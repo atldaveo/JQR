@@ -2,10 +2,9 @@
  * @file helpers.c
  * @author David Chung (david.chung1719@outlook.com)
  * @brief Defines maintenance functions used in main.c
- * @version 0.1
+ * @version 1.0
  * @date 02Dec24
  * 
- * @copyright Copyright (c) 2024
  * 
  */
 

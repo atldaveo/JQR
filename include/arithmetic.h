@@ -65,7 +65,7 @@ int32_t divide(int32_t x, int32_t y, int32_t *res);
  * @return int32_t On success, returns a 0. Otherwise, return -1.
  */
 
-int32_t shift_right(int32_t num, int32_t space, int32_t *res);
+int32_t shift_right(uint32_t num, uint32_t space, uint32_t *res);
 
 /**
  * @brief Shift Left function
@@ -76,6 +76,6 @@ int32_t shift_right(int32_t num, int32_t space, int32_t *res);
  * @return int32_t On success, returns a 0. Otherwise, return -1.
  */
 
-int32_t shift_left(int32_t num, int32_t space, int32_t *res);
+int32_t shift_left(uint32_t num, uint32_t space, uint32_t *res);
 
 #endif

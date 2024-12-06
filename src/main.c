@@ -109,6 +109,9 @@ int main(int argc, char *argv[])
     int32_t num2 = 0;                           /**< Variable that will hold an operand with MAX 32 bits */
     int32_t result = 0;                         /**< Pointer to the location of arithmetic results */
     int32_t state = 0;                          /**< Variable holding the return value for arithmetic functions */
+    uint32_t u_result = 0;
+    uint32_t num = 0;
+    uint32_t space = 0;
     char *num_end1 = NULL;                      /**< Pointer to the end of num1 */
     char *num_end2 = NULL;                      /**< Pointer to the end of num2 */
     int rc = -1;                                /**< Initiate 'return code' as fail - enable single exit point */                                
@@ -258,33 +261,54 @@ int main(int argc, char *argv[])
                     break;
                 }
             case RIGHTSHIFT:
-                state = shift_right(num1, num2, &result);
-                if (0 == state)
+                if ((0 <= num1) && (0 <= num2))
                 {
-                    printf("%d >> %d = %d\n", num1, num2, result);
-                    rc = 0;
-                    break;
+                    num = (uint32_t)num1;
+                    space = (uint32_t)num2;
+                    state = shift_right(num, space, &u_result);
+                    if (0 == state)
+                    {
+                        printf("%d >> %d = %d\n", num, space, u_result);
+                        rc = 0;
+                        break;
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Right-Shift Error!\n");
+                        break;
+                    }
                 }
                 else
                 {
-                    fprintf(stderr, "Operation invalid. Review your work\n");
+                    fprintf(stderr, "Error: Invalid shift!\n");
                     break;
                 }
+                
             case LEFTSHIFT:
-                state = shift_left(num1, num2, &result);
-                if (0 == state)
+                if ((0 <= num1) && (0 <= num2))
                 {
-                    printf("%d << %d = %d\n", num1, num2, result);
-                    rc = 0;
-                    break;
+                    num = (uint32_t)num1;
+                    space = (uint32_t)num2;
+                    state = shift_left(num, space, &u_result);
+                    if (0 == state)
+                    {
+                        printf("%d >> %d = %d\n", num, space, u_result);
+                        rc = 0;
+                        break;
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Left-Shift error!\n");
+                        break;
+                    }
                 }
                 else
                 {
-                    fprintf(stderr, "Operation invalid. Review your work\n");
+                    fprintf(stderr, "Error: Invalid shift!\n");
                     break;
                 }
             default:
-                fprintf(stderr, "Invalid operation.\n");
+                fprintf(stderr, "Operation invalid! Check your inputs!\n");
                 break;
         }
     }

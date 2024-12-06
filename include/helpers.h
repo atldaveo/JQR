@@ -6,9 +6,7 @@
  * 
  * @version 2.1
  * @date 2024-11-25
- * 
- * @copyright Copyright (c) 2024
- * 
+ *
  */
 
 #ifndef HELPERS_H
