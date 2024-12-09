@@ -309,6 +309,7 @@ int main(int argc, char *argv[])
                 }
             default:
                 fprintf(stderr, "Operation invalid! Check your inputs!\n");
+                print_help(argv[0]);
                 break;
         }
     }

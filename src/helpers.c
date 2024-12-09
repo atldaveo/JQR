@@ -33,14 +33,3 @@ void print_help(const char *program_name)
     printf("  -h                  Show this help message\n");
     printf("  -v                  Show version information\n");
 }
-
-/**
- * @brief Prints software information.
- * 
- */
-
-void print_version() 
-{
-    printf("simple-calc version 2.5\n");
-    printf("Now includes other operators and more flexibility\n");
-}
