@@ -1,4 +1,6 @@
-#ifndef DATA_MGMT_H
-#define DATA_MGMT_H
+#ifndef linkedlist_H
+#define linkedlist_H
+
+
 
 #endif
