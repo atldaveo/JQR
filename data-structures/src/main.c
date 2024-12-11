@@ -1,6 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**< Main function helpers */
+
+/** @brief Traverse and print each node's data */
+void traverse(Node* head) 
+{
+    Node* current = head;
+    int nodeNumber = 0;
+    while (current != NULL) 
+    {
+        printf("Node %d contains: %d\n", nodeNumber, *(int*)current->data);
+        current = current->next;
+        nodeNumber++;
+    }
+}
+
+/** @brief Print the data with the node number (index) */
+void printNodeDataWithIndex(Node* node, int index) 
+{
+    printf("Node %d contains: %d\n", index, *(int*)node->data);
+}
+
+/** @brief Function to print the list (assume data are integers) */
+void printList(Node* head) 
+{
+    Node* current = head;
+    int index = 0;
+    while (current != NULL) {
+        printf("Node %d contains: %d\n", index++, *(int*)current->data);  // Dereference data as int
+        current = current->next;  // Move to the next node
+    }
+}
+
+/************************************************************************/
+
+/**< Structure / Methods for Singly Linked Lists */
+
 typedef struct Node {
     void* data;
     struct Node* next;
@@ -22,8 +58,8 @@ Node* createNode(void* data)
  *  before assign to newNode via explicit declaration (Node*).
  */
     Node* newNode = (Node*)malloc(sizeof(Node));            // sizeof() ensures that the right amount of memory is allocated.
-    newNode->data = data;                                   // Access value of member 'data' (void ptr) of newNode and assigns 'data'.  
-    newNode->next = NULL;                                   // Sets value of member 'next' (node ptr) of 'newNode' and assigns 'NULL' (to indicate final node).
+    newNode->data = data;                                   // Access data of member 'data' (void ptr) of newNode and assigns 'data'.  
+    newNode->next = NULL;                                   // Sets data of member 'next' (node ptr) of 'newNode' and assigns 'NULL' (to indicate final node).
     return newNode;                                         // Return a (node) pointer to the new node
 }
 
@@ -138,40 +174,239 @@ void modifyNode(Node* head, int index, void* newData)
 
 /************************************************************************/
 
-/** @brief Traverse and print each node's data */
-void traverse(Node* head) 
+/**< Structure / Methods for Hash Map with Chaining */
+
+#define HASH_MAP_SIZE 100
+
+/**< Define key-data pair */
+// TODO: How does pointer 'next' prevent collisions?
+typedef struct HashNode 
 {
-    Node* current = head;
-    int nodeNumber = 0;
-    while (current != NULL) 
+    char* key;
+    void* data;
+    struct HashNode* next;                              
+} HashNode;                                             // Global variable declaration 
+
+/**< Define hash map structure */
+typedef struct HashMap
+{
+    HashNode* buckets[HASH_MAP_SIZE];                   // Array of pointers to hash nodes
+} HashMap;                                              // Global variable declaration
+
+/** @brief Generate index for a key using a hash function 
+ * 
+ * @param key Allows an index to be generated in reference to hash map 
+ * @return unsigned int Cannot be negative
+ */
+unsigned int hashFunction(const char* key)
+{
+    unsigned int hash = 0;
+    // TODO: Explicit comparison
+    while (*key)                          
     {
-        printf("Node %d contains: %d\n", nodeNumber, *(int*)current->data);
+        hash = (hash * 31) + *key;                      // Hash function. Change as needed.
+        key++;
+    }
+    return hash % HASH_MAP_SIZE;                
+}
+
+/** @brief Create a new hash map
+ * 
+ * @return HashMap* Pointer to a new hash map
+ */
+HashMap* createHashMap()
+{
+    HashMap* map = (HashMap*)malloc(sizeof(HashMap));   // Dynamic memory allocation
+    for (int i = 0; i < HASH_MAP_SIZE; i++) 
+    {
+        map->buckets[i] = NULL;                         // All buckets in hash map are initialized to NULL
+    }
+    return map;
+}
+
+/** @brief Create a new hash node
+ * 
+ * @param key 
+ * @param data Data to be stored in the node
+ * @return HashNode* Pointer to a new node
+ */
+HashNode* createHashNode(const char* key, void* data) 
+{
+    HashNode* node = (HashNode*)malloc(sizeof(HashNode));   
+    node->key = strdup(key);                            // Duplicate the key string
+    node->data = data;                                  // Assign data to the node 
+    node->next = NULL;                                  
+    return node;
+}
+
+/** @brief Insert a key-data pair into hash map 
+ * 
+ * @param map 
+ * @param key 
+ * @param data 
+ */
+void insert(HashMap* map, const char* key, void* data)
+{
+    unsigned int index = hashFunction(key);
+    HashNode* newNode = createHashNode(key, data);
+
+    if (!map->buckets[index])
+    {
+        map->buckets[index] = newNode;                  // Insert directly if no collision
+    } 
+    else 
+    {
+        // Handle collision using chaining
+        HashNode* current = map->buckets[index];
+        while (current->next) {
+            // If the key already exists, update its data
+            // TODO: replace 'strcmp' with 'strncmp'
+            if (strcmp(current->key, key) == 0) 
+            {
+                current->data = data;
+                free(newNode->key);
+                free(newNode);
+                return;
+            }
+            current = current->next;
+        }
+        // Add new node to the end of the chain
+        current->next = newNode;
+    }
+}
+
+/** @brief Search for a key in the hash map
+ * 
+ * @param map Reference hash map
+ * @param key Key in question
+ * @return void* 
+ */
+void* search(HashMap* map, const char* key) 
+{
+    unsigned int index = hashFunction(key);
+    HashNode* current = map->buckets[index];
+
+    //TODO: Explicit comparison for while-loop
+    while (current) {
+        //TODO: Replace with 'strncmp' 
+        if (strcmp(current->key, key) == 0) 
+        {
+            return current->data;  // Return the data if key is found
+        }
         current = current->next;
-        nodeNumber++;
+    }
+
+    // If the key isn't in the map...
+    fprintf(stderr, "Key not found");
+    return NULL;  
+}
+
+/** @brief Delete Key-data pair from map
+ * 
+ * @param map Reference map
+ * @param key Desired key to be deleted 
+ */
+void deleteKey(HashMap* map, const char* key) 
+{
+    unsigned int index = hashFunction(key);
+    HashNode* current = map->buckets[index];
+    HashNode* prev = NULL;
+
+    while (current) 
+    {
+        if (strcmp(current->key, key) == 0) 
+        {
+            // Remove the node
+            if (prev) 
+            {
+                prev->next = current->next;
+            } 
+            else 
+            {
+                map->buckets[index] = current->next;
+            }
+            free(current->key);
+            free(current);
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+    fprintf(stderr,"Key '%s' not found.\n", key);
+}
+
+/** @brief Delete / sterilize hash map
+ * 
+ * @param map Map to be sterilized
+ */
+void freeHashMap(HashMap* map) 
+{
+    for (int i = 0; i < HASH_MAP_SIZE; i++) 
+    {
+        HashNode* current = map->buckets[i];
+        while (current) 
+        {
+            HashNode* temp = current;
+            current = current->next;
+            free(temp->key);
+            free(temp);
+        }
+    }
+    free(map);
+}
+
+/** @brief Print all key-data pairs in the hash map
+ * 
+ * @param map Map to be printed
+ */
+void printHashMap(HashMap* map) 
+{
+    for (int i = 0; i < HASH_MAP_SIZE; i++) 
+    {
+        HashNode* current = map->buckets[i];
+        while (current) 
+        {
+            printf("Key: %s, data: %s\n", current->key, (char*)current->data);
+            current = current->next;
+        }
     }
 }
 
-/** @brief Print the data with the node number (index) */
-void printNodeDataWithIndex(Node* node, int index) 
-{
-    printf("Node %d contains: %d\n", index, *(int*)node->data);
-}
 
-/** @brief Function to print the list (assume data are integers) */
-void printList(Node* head) 
-{
-    Node* current = head;
-    int index = 0;
-    while (current != NULL) {
-        printf("Node %d contains: %d\n", index++, *(int*)current->data);  // Dereference data as int
-        current = current->next;  // Move to the next node
+// Methods validation
+int main() 
+{    
+    HashMap* map = createHashMap();
+
+    // Insert key-data pairs
+    insert(map, "name", "Alice");
+    insert(map, "age", "25");
+    insert(map, "city", "New York");
+
+    // Search for a key
+    char* data = (char*)search(map, "age");
+    if (data) {
+        printf("Found: %s\n", data);
+    } else {
+        printf("Key not found.\n");
     }
-}
 
-/************************************************************************/
+    // Print all key-data pairs
+    printf("\nHashMap Contents:\n");
+    printHashMap(map);
 
-// Linked List functions validation
-int main() {
+    // Delete a key
+    deleteKey(map, "city");
+
+    // Print all key-data pairs after deletion
+    printf("\nHashMap After Deletion:\n");
+    printHashMap(map);
+
+    // Free the hash map
+    freeHashMap(map);
+
+    /*
+    // Linked List Validation
     Node* head = NULL;  // Start with an empty list
 
     // Example data (to be stored in nodes)
@@ -185,7 +420,7 @@ int main() {
     addNodeTop(&head, &data2);      // Add 20 at the head (Node1)
     addNodeTop(&head, &data3);      // Add 30 at the head (Node2)
     //deleteNode(&head, 1);         // Delete node containing 20
-    modifyNode(head, 2, &data4);   // Change value of Node2 from 30 to 50
+    modifyNode(head, 2, &data4);    // Change data of Node2 from 30 to 50
 
     // Print the linked list by index
     // Order should be Node2 (Head), Node1, Node0
@@ -199,6 +434,7 @@ int main() {
         free(current);
         current = nextNode;
     }
+    */
 
     return 0;
 }
