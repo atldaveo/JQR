@@ -15,7 +15,7 @@ int main()
 
     // Search for a key
     char* data = (char*)search(map, "age");
-    if (data) 
+    if (NULL != data) 
     {
         printf("Found: %s\n", data);
     } 

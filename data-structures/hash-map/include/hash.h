@@ -4,7 +4,6 @@
 #define HASH_MAP_SIZE 100
 
 /**< Define key-data pair */
-// TODO: How does pointer 'next' prevent collisions?
 typedef struct HashNode 
 {
     char* key;
@@ -41,9 +40,9 @@ HashNode* createHashNode(const char* key, void* data);
 
 /** @brief Insert a key-data pair into hash map 
  * 
- * @param map 
- * @param key 
- * @param data 
+ * @param map Hash map to be used
+ * @param key Key to be inserted
+ * @param data Data to be associated with the key 
  */
 void insert(HashMap* map, const char* key, void* data);
 
@@ -68,7 +67,7 @@ void deleteKey(HashMap* map, const char* key);
  */
 void freeHashMap(HashMap* map);
 
-/** @brief Print all key-value pairs in the hash map
+/** @brief Print all key-data pairs in the hash map
  * 
  * @param map Map to be printed
  */

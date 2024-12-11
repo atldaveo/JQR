@@ -4,7 +4,6 @@
 
 #include "hash.h"
 
-
 char *strdup(const char *src) 
 {
     char *dst = malloc(strlen (src) + 1);  // Space for length plus nul
