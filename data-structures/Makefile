@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g
 
 # Project Name
-PROJECT = datastructures
+PROJECT = data-structures
 
 # Source and Build Directories
 SRCDIR = src
