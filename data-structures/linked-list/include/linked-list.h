@@ -31,7 +31,8 @@ Node* createNode(void* data);
  */
 void insertNode(Node** head, int index, void* data);
 
-/** @brief Add a node to the bottom of the linked list
+/** @brief Add a node to the bottom of the linked list.
+ * This node will link to the top of the list - making it circular
  * 
  * @param head (Node) Pointer to first node in the list
  * @param data (Void) pointer to location of data to be sent to node  
