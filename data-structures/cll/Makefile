@@ -37,7 +37,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 # Clean Build Files
 clean:
 	@echo "Cleaning build files..."
-	rm -rf $(BUILDDIR) $(TARGET)
+	rm -rf $(BUILDDIR) $(TARGET) $(TARGET).exe
 
 # Rebuild Project
 rebuild: clean all
