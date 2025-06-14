@@ -1,0 +1,11 @@
+# Issue 97: Describe the concept of Continuous Integration (CI) and how it relates to testing and overall product quality
+
+Continuous Integration (CI) is a software development principle that encourages frequent additions to a shared code repository. These additions come in the form of pull requests (Github), merge requests (Gitlab CI/CD), and various other forms in different tools like Travis CI or Circle CI (Fowler 2024). An important facet of CI, as mentioned earler is the frequent merges and commits of code. The frequency of these code additions means that the changes committed to a repository are likely small and incremental. This, combined with version controlling measures, ensures that bugs will be easier to trace, easily fixed, and won't ruin the overall system that the individual developers are working to build. 
+
+CI is heavily dependent on testing to maintain software stability and reliability. As such, tools like Gitlab provide automated pipeline testing to ensure that newly committed code is integratable into the existing main. Moreover, CI's principles inherently reinforces good practices like early bug detection, faster development cycles, and improved code quality. Combined with the wide array of features in platforms like Gitlab, development teams have an increased capacity for collaboration and reduced deployment risks. As a result, the quality of the final product is significantly improved and developed faster. On the contrary, a team that merely pulls a main branch, develops features independently, and immediately pushes changes to the original system will face significant issues in debugging (issues will be tremendously more difficult to pinpoint), lack robustness (as testing may not be automated / rigorous), and exponentially more time-consuming (significant changes made directly to the main system with catastrophic errors may lead to restarting the project from scratch). 
+(Use CI/CD 2025)   
+
+## Works Cited
+Fowler M. Continuous Integration. [Internet]. Thoughtworks; 18 Jan 2024. [accessed 2025 Jan 28]. Available from: https://martinfowler.com/articles/continuousIntegration.html
+
+Use CI/CD to build your application. [Internet]. Gitlab Docs. [accessed 2025 Jan 28]. Available from: https://docs.gitlab.com/ee/topics/build_your_application.html

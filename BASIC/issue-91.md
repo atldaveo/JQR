@@ -1,0 +1,8 @@
+# Issue 91: Describe how to identify data structures in static analysis
+
+Once the binary has been disassembled, given the movement of data between registers and  allocation of stack resources and its corresponding decompiled code, one can infer that a data structure is under construction. As variables and structures are being instantiated, the disassembler will show sizes of offsets in the stack / register that corresponds to the data allocated with the size of the struct. For instance, as values are being assigned into data structures, the offset of the memory address will decrease accordingly. So a 42-bit offset in the stack frame allocated to a data structure indicates that the number 42 was entered into the struct. 
+
+As these instructions continue, one can continue to make inferences as to how the data structure is being formed and what kind of values exist within the data structure without actually running the code. Additionally, by having decompiled code open alongside the assembly instructions like in Ghidra, much of the unabstracted uncertainties surrounding the pure assembly instructions can be better determined in that one can see specific data assignments (with generically named variables) and specific functions (such as `malloc`) can be confidently inferred given both how it appears in assembly (`CALL FID_conflict:<lambda_invoker_cdecl>(0)`) and the structure of the code decompiled code.   
+
+## Works Cited
+Stroschein J. 2021. Reversing Structures - Ghidra Reversing Tutorials. [Internet]. Youtube; [accessed 2025 Jan 28]. Available from: youtube.com/watch?v=ntTV8V7KVco
